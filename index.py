@@ -40,10 +40,12 @@ def index():
 
     soup = BeautifulSoup(response.text,"html.parser")
 
+    print(soup)
+
     table = soup.find_all('table',attrs={'class':'table tm-table tm-table-fixed'})
 
     print(table)
-    
+
     trs = table[0].find_all('tr')
 
     fragments = []

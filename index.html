@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class = item>
+            <div>
+                {% for fragment in fragments %}
+                    <a target="_blank" href="{{fragment.url()}}">{{fragment.id}}</a> {{fragment.price}}, {{fragment.time}},  {{fragment.time_to_end}}</br>
+                {% endfor %}
+            </ul>
+        </div>
+    </body>
+</html>

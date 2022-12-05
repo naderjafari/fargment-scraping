@@ -1,28 +1,24 @@
-import requests
-import re
-from bs4 import BeautifulSoup
-from datetime import date,datetime
-import dateutil.parser as dt
-from dateutil.relativedelta import relativedelta
-import pytz
-from flask import Flask, request
-from flask import Response,render_template
-import json
-from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
-import time
-import os
 # from urllib.request import urlopen
 import json
+import os
+import re
+import time
+from datetime import date, datetime
 
-
+import dateutil.parser as dt
 import psycopg2
-
+import pytz
+import requests
+from apscheduler.schedulers.background import BackgroundScheduler
+from bs4 import BeautifulSoup
+from dateutil.relativedelta import relativedelta
+from flask import Flask, Response, render_template, request
 
 print(os.environ['DB_USERNAME'])
 
 conn = psycopg2.connect(
-        host="2.56.155.29",
+        host=os.environ['DB_ADDRESS'],
         database="fragment",
         user=os.environ['DB_USERNAME'],
         password=os.environ['DB_PASSWORD'])
@@ -37,8 +33,6 @@ for item in data_json['data']:
     if(int(item['bids']) > 1):
         print(item['domain'],item['date'],item['bids'],item['price'])
 # print(data_json)
-
-
 
 
 utc=pytz.UTC

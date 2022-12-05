@@ -8,6 +8,35 @@ import pytz
 from flask import Flask, request
 from flask import Response,render_template
 import json
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+import time
+import os
+# from urllib.request import urlopen
+import json
+
+
+import psycopg2
+
+
+print(os.environ['DB_USERNAME'])
+
+conn = psycopg2.connect(
+        host="2.56.155.29",
+        database="fragment",
+        user=os.environ['DB_USERNAME'],
+        password=os.environ['DB_PASSWORD'])
+
+# Open a cursor to perform database operations
+
+ton_auctions = 'https://tonapi.io/v1/auction/getCurrent?tld=t.me'
+response = requests.get(ton_auctions)
+data_json = json.loads(response.text)
+
+for item in data_json['data']:
+    if(int(item['bids']) > 1):
+        print(item['domain'],item['date'],item['bids'],item['price'])
+# print(data_json)
 
 
 
@@ -15,6 +44,26 @@ import json
 utc=pytz.UTC
 
 app = Flask(__name__,template_folder='./')
+
+def print_date_time():
+    print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+    cur = conn.cursor()
+
+    cur.execute('INSERT INTO public.auction('+
+	'username, id)'+
+	'VALUES (%s, %s)',('ali',10))
+
+    conn.commit()
+
+    cur.close()
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=print_date_time, trigger="interval", seconds=5)
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+atexit.register(lambda: conn.close())
 
 
 class fragment:

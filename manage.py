@@ -2,10 +2,10 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from app import app, db
+from config import app, db
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
 
 migrate = Migrate(app, db)
 manager = Manager(app)
